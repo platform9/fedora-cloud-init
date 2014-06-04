@@ -1,9 +1,13 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %{!?license: %global license %%doc}
 
+# The only reason we are archful is because dmidecode is ExclusiveArch
+# https://bugzilla.redhat.com/show_bug.cgi?id=1067089
+%global debug_package %{nil}
+
 Name:           cloud-init
 Version:        0.7.2
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -33,14 +37,18 @@ Patch2:         cloud-init-0.7.2-selinux-enabled.patch
 # https://code.launchpad.net/~gholms/cloud-init/rsyslog-programname/+merge/186906
 Patch3:         cloud-init-0.7.2-rsyslog-programname.patch
 
+# Deal with noarch -> arch
+# https://bugzilla.redhat.com/show_bug.cgi?id=1067089
+Obsoletes:      cloud-init < 0.7.2-10
 
-BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools
 BuildRequires:  systemd-units
+%ifarch %{?ix86} x86_64 ia64
 Requires:       dmidecode
+%endif
 Requires:       e2fsprogs
 Requires:       iproute
 Requires:       libselinux-python
@@ -161,6 +169,9 @@ fi
 
 
 %changelog
+* Wed Jun  4 2014 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.2-10
+- Make dmidecode dependency arch-dependent [RH:1025071 RH:1067089]
+
 * Mon Jun  2 2014 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.2-9
 - Write /etc/locale.conf instead of /etc/sysconfig/i18n [RH:1008250]
 - Add tmpfiles.d configuration for /run/cloud-init [RH:1103761]
