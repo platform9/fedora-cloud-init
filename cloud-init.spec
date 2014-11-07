@@ -7,7 +7,7 @@
 
 Name:           cloud-init
 Version:        0.7.5
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -49,7 +49,6 @@ Requires:       libselinux-python
 Requires:       net-tools
 Requires:       policycoreutils-python
 Requires:       procps
-Requires:       python-boto
 Requires:       python-cheetah
 Requires:       python-configobj
 Requires:       python-prettytable
@@ -164,6 +163,9 @@ fi
 
 
 %changelog
+* Fri Nov  7 2014 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.5-8
+- Dropped python-boto dependency [RH:1161257]
+
 * Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.5-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
