@@ -55,7 +55,6 @@ Requires:       python-prettytable
 Requires:       python-requests
 Requires:       PyYAML
 Requires:       python-jsonpatch
-Requires:       rsyslog
 Requires:       shadow-utils
 Requires:       /usr/bin/run-parts
 Requires(post):   systemd-units
@@ -159,12 +158,14 @@ fi
 %dir /run/cloud-init
 %dir /var/lib/cloud
 
+%dir %{_sysconfdir}/rsyslog.d
 %config(noreplace) %{_sysconfdir}/rsyslog.d/21-cloudinit.conf
 
 
 %changelog
 * Fri Nov  7 2014 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.5-8
 - Dropped python-boto dependency [RH:1161257]
+- Dropped rsyslog dependency [RH:986511]
 
 * Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.5-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
