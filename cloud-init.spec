@@ -6,8 +6,8 @@
 %global debug_package %{nil}
 
 Name:           cloud-init
-Version:        0.7.5
-Release:        8%{?dist}
+Version:        0.7.6
+Release:        2%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -19,7 +19,7 @@ Source2:        cloud-init-README.fedora
 Source3:        cloud-init-tmpfiles.conf
 
 # Deal with Fedora/Ubuntu path differences
-Patch0:         cloud-init-0.7.5-fedora.patch
+Patch0:         Move-helper-tools-to-usr-lib.patch
 
 # Fix rsyslog log filtering
 # https://code.launchpad.net/~gholms/cloud-init/rsyslog-programname/+merge/186906
@@ -28,15 +28,13 @@ Patch1:         cloud-init-0.7.5-rsyslog-programname.patch
 # Systemd 213 removed the --quiet option from ``udevadm settle''
 Patch2:         cloud-init-0.7.5-udevadm-quiet.patch
 
-# there is a typo in setting.py
-Patch3:         cloud-init-settings-providers.patch
-
 # Deal with noarch -> arch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1067089
 Obsoletes:      cloud-init < 0.7.5-3
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+BuildRequires:  git
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools
 BuildRequires:  systemd-units
@@ -49,7 +47,6 @@ Requires:       libselinux-python
 Requires:       net-tools
 Requires:       policycoreutils-python
 Requires:       procps
-Requires:       python-cheetah
 Requires:       python-configobj
 Requires:       python-prettytable
 Requires:       python-requests
@@ -68,11 +65,7 @@ ssh keys and to let the user run various scripts.
 
 
 %prep
-%setup -q -n %{name}-%{version}
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
+%autosetup -Sgit -n %{name}-%{version} 
 
 cp -p %{SOURCE2} README.fedora
 
@@ -83,7 +76,7 @@ cp -p %{SOURCE2} README.fedora
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+%{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT  --init-system=systemd
 
 # Don't ship the tests
 rm -r $RPM_BUILD_ROOT%{python_sitelib}/tests
@@ -138,7 +131,7 @@ fi
 
 %files
 %license LICENSE
-%doc ChangeLog TODO README.fedora
+%doc ChangeLog README.fedora
 %config(noreplace) %{_sysconfdir}/cloud/cloud.cfg
 %dir               %{_sysconfdir}/cloud/cloud.cfg.d
 %config(noreplace) %{_sysconfdir}/cloud/cloud.cfg.d/*.cfg
@@ -163,6 +156,10 @@ fi
 
 
 %changelog
+* Fri Nov 14 2014 Colin Walters <walters@redhat.com> - 0.7.6-1
+- New upstream version [RH:974327]
+- Drop python-cheetah dependency (same as above bug)
+
 * Fri Nov  7 2014 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.5-8
 - Dropped python-boto dependency [RH:1161257]
 - Dropped rsyslog dependency [RH:986511]
