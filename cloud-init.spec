@@ -7,7 +7,7 @@
 
 Name:           cloud-init
 Version:        0.7.6
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -19,7 +19,7 @@ Source2:        cloud-init-README.fedora
 Source3:        cloud-init-tmpfiles.conf
 
 # Deal with Fedora/Ubuntu path differences
-Patch0:         Move-helper-tools-to-usr-lib.patch
+Patch0:         cloud-init-0.7.6-path.patch
 
 # Fix rsyslog log filtering
 # https://code.launchpad.net/~gholms/cloud-init/rsyslog-programname/+merge/186906
@@ -34,7 +34,6 @@ Obsoletes:      cloud-init < 0.7.5-3
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  git
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools
 BuildRequires:  systemd-units
@@ -65,7 +64,7 @@ ssh keys and to let the user run various scripts.
 
 
 %prep
-%autosetup -Sgit -n %{name}-%{version} 
+%autosetup -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -156,6 +155,9 @@ fi
 
 
 %changelog
+* Thu Feb 19 2015 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.6-3
+- Stopped depending on git to build
+
 * Fri Nov 14 2014 Colin Walters <walters@redhat.com> - 0.7.6-2
 - New upstream version [RH:974327]
 - Drop python-cheetah dependency (same as above bug)
