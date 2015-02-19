@@ -146,7 +146,6 @@ fi
 %{python_sitelib}/*
 %{_libexecdir}/%{name}
 %{_bindir}/cloud-init*
-%doc %{_datadir}/doc/%{name}
 %dir /run/cloud-init
 %dir /var/lib/cloud
 
@@ -157,6 +156,7 @@ fi
 %changelog
 * Thu Feb 19 2015 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.6-3
 - Stopped depending on git to build
+- Stopped implicitly listing doc files twice
 
 * Fri Nov 14 2014 Colin Walters <walters@redhat.com> - 0.7.6-2
 - New upstream version [RH:974327]
