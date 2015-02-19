@@ -156,7 +156,7 @@ fi
 
 
 %changelog
-* Fri Nov 14 2014 Colin Walters <walters@redhat.com> - 0.7.6-1
+* Fri Nov 14 2014 Colin Walters <walters@redhat.com> - 0.7.6-2
 - New upstream version [RH:974327]
 - Drop python-cheetah dependency (same as above bug)
 
