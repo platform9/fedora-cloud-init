@@ -123,28 +123,15 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %post
-if [ $1 -eq 1 ] ; then
-    # Initial installation
-    # Enabled by default per "runs once then goes away" exception
-    /bin/systemctl enable cloud-config.service     >/dev/null 2>&1 || :
-    /bin/systemctl enable cloud-final.service      >/dev/null 2>&1 || :
-    /bin/systemctl enable cloud-init.service       >/dev/null 2>&1 || :
-    /bin/systemctl enable cloud-init-local.service >/dev/null 2>&1 || :
-fi
+# These services are now enabled by the cloud image's kickstart.
+# They should probably be done with a preset instead.
+%systemd_post cloud-config.service cloud-final.service cloud-init.service cloud-init-local.service
 
 %preun
-if [ $1 -eq 0 ] ; then
-    # Package removal, not upgrade
-    /bin/systemctl --no-reload disable cloud-config.service >/dev/null 2>&1 || :
-    /bin/systemctl --no-reload disable cloud-final.service  >/dev/null 2>&1 || :
-    /bin/systemctl --no-reload disable cloud-init.service   >/dev/null 2>&1 || :
-    /bin/systemctl --no-reload disable cloud-init-local.service >/dev/null 2>&1 || :
-    # One-shot services -> no need to stop
-fi
+%systemd_preun cloud-config.service cloud-final.service cloud-init.service cloud-init-local.service
 
 %postun
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-# One-shot services -> no need to restart
+%systemd_postun
 
 
 %files
@@ -180,6 +167,7 @@ fi
 - Fixed handling of user group lists that contain spaces [RH:1126365 LP:1354694]
 - Changed network.target systemd deps to network-online.target [RH:1110731 RH:1112817 RH:1147613]
 - Fixed race condition between cloud-init.service and the login prompt
+- Stopped enabling services in %%post (now done by kickstart) [RH:850058]
 
 * Fri Nov 14 2014 Colin Walters <walters@redhat.com> - 0.7.6-2
 - New upstream version [RH:974327]
