@@ -37,6 +37,12 @@ Patch3:         cloud-init-0.7.6-ecdsa.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1126365
 Patch4:         cloud-init-0.7.6-groupadd-list.patch
 
+# Change network.target systemd deps to network-online.target
+# https://bugzilla.redhat.com/show_bug.cgi?id=1110731
+# https://bugzilla.redhat.com/show_bug.cgi?id=1112817
+# https://bugzilla.redhat.com/show_bug.cgi?id=1147613
+Patch5:         cloud-init-0.7.6-network-online.patch
+
 # Deal with noarch -> arch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1067089
 Obsoletes:      cloud-init < 0.7.5-3
@@ -168,6 +174,7 @@ fi
 - Stopped implicitly listing doc files twice
 - Added recognition of 3 ecdsa-sha2-nistp* ssh key types [RH:1151824]
 - Fixed handling of user group lists that contain spaces [RH:1126365 LP:1354694]
+- Changed network.target systemd deps to network-online.target [RH:1110731 RH:1112817 RH:1147613]
 
 * Fri Nov 14 2014 Colin Walters <walters@redhat.com> - 0.7.6-2
 - New upstream version [RH:974327]
