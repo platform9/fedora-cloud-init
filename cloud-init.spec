@@ -32,6 +32,11 @@ Patch2:         cloud-init-0.7.5-udevadm-quiet.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1151824
 Patch3:         cloud-init-0.7.6-ecdsa.patch
 
+# Handle whitespace in lists of groups to add new users to
+# https://bugs.launchpad.net/cloud-init/+bug/1354694
+# https://bugzilla.redhat.com/show_bug.cgi?id=1126365
+Patch4:         cloud-init-0.7.6-groupadd-list.patch
+
 # Deal with noarch -> arch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1067089
 Obsoletes:      cloud-init < 0.7.5-3
@@ -162,6 +167,7 @@ fi
 - Stopped depending on git to build
 - Stopped implicitly listing doc files twice
 - Added recognition of 3 ecdsa-sha2-nistp* ssh key types [RH:1151824]
+- Fixed handling of user group lists that contain spaces [RH:1126365 LP:1354694]
 
 * Fri Nov 14 2014 Colin Walters <walters@redhat.com> - 0.7.6-2
 - New upstream version [RH:974327]
