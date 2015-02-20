@@ -47,6 +47,10 @@ Patch5:         cloud-init-0.7.6-network-online.patch
 # http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/revision/1050
 Patch6:         cloud-init-0.7.6-user-session.patch
 
+# Use dnf instead of yum when available
+# https://bugzilla.redhat.com/show_bug.cgi?id=1194451
+Patch7:         cloud-init-0.7.6-dnf.patch
+
 # Deal with noarch -> arch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1067089
 Obsoletes:      cloud-init < 0.7.5-3
@@ -168,6 +172,7 @@ rm -rf $RPM_BUILD_ROOT
 - Changed network.target systemd deps to network-online.target [RH:1110731 RH:1112817 RH:1147613]
 - Fixed race condition between cloud-init.service and the login prompt
 - Stopped enabling services in %%post (now done by kickstart) [RH:850058]
+- Switched to dnf instead of yum when available [RH:1194451]
 
 * Fri Nov 14 2014 Colin Walters <walters@redhat.com> - 0.7.6-2
 - New upstream version [RH:974327]

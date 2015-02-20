@@ -1,0 +1,33 @@
+Index: cloud-init-0.7.6/cloudinit/distros/rhel.py
+===================================================================
+--- cloud-init-0.7.6.orig/cloudinit/distros/rhel.py
++++ cloud-init-0.7.6/cloudinit/distros/rhel.py
+@@ -20,6 +20,8 @@
+ #    You should have received a copy of the GNU General Public License
+ #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
++import os.path
++
+ from cloudinit import distros
+ from cloudinit import helpers
+ from cloudinit import log as logging
+@@ -181,13 +183,12 @@ class Distro(distros.Distro):
+         if pkgs is None:
+             pkgs = []
+ 
+-        cmd = ['yum']
+-        # If enabled, then yum will be tolerant of errors on the command line
+-        # with regard to packages.
+-        # For example: if you request to install foo, bar and baz and baz is
+-        # installed; yum won't error out complaining that baz is already
+-        # installed.
+-        cmd.append("-t")
++        if os.path.isfile('/usr/bin/dnf'):
++            LOG.debug('Using DNF for package management')
++            cmd = ['dnf']
++        else:
++            LOG.debug('Using DNF for package management')
++            cmd = ['yum', '-t']
+         # Determines whether or not yum prompts for confirmation
+         # of critical actions. We don't want to prompt...
+         cmd.append("-y")
