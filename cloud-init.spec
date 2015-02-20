@@ -28,6 +28,10 @@ Patch1:         cloud-init-0.7.5-rsyslog-programname.patch
 # Systemd 213 removed the --quiet option from ``udevadm settle''
 Patch2:         cloud-init-0.7.5-udevadm-quiet.patch
 
+# Add 3 ecdsa-sha2-nistp* ssh key types now that they are standardized
+# https://bugzilla.redhat.com/show_bug.cgi?id=1151824
+Patch3:         cloud-init-0.7.6-ecdsa.patch
+
 # Deal with noarch -> arch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1067089
 Obsoletes:      cloud-init < 0.7.5-3
@@ -157,6 +161,7 @@ fi
 * Thu Feb 19 2015 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.6-3
 - Stopped depending on git to build
 - Stopped implicitly listing doc files twice
+- Added recognition of 3 ecdsa-sha2-nistp* ssh key types [RH:1151824]
 
 * Fri Nov 14 2014 Colin Walters <walters@redhat.com> - 0.7.6-2
 - New upstream version [RH:974327]
