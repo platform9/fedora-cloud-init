@@ -1,4 +1,3 @@
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %{!?license: %global license %%doc}
 
 # The only reason we are archful is because dmidecode is ExclusiveArch
@@ -52,23 +51,41 @@ Obsoletes:      cloud-init < 0.7.5-3
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  python-devel
-BuildRequires:  python-setuptools
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
 BuildRequires:  systemd-units
+
+# For tests
+BuildRequires:  python3-configobj
+BuildRequires:  python3-httpretty
+BuildRequires:  python3-jinja2
+BuildRequires:  python3-jsonpatch
+BuildRequires:  python3-mock
+BuildRequires:  python3-nose
+BuildRequires:  python3-oauthlib
+BuildRequires:  python3-pyserial
+BuildRequires:  python3-PyYAML
+BuildRequires:  python3-requests
+BuildRequires:  python3-six
+
 %ifarch %{?ix86} x86_64 ia64
 Requires:       dmidecode
 %endif
 Requires:       e2fsprogs
 Requires:       iproute
-Requires:       libselinux-python
+Requires:       libselinux-python3
 Requires:       net-tools
-Requires:       policycoreutils-python
+Requires:       policycoreutils-python3
 Requires:       procps
-Requires:       python-configobj
-Requires:       python-prettytable
-Requires:       python-requests
-Requires:       PyYAML
-Requires:       python-jsonpatch
+Requires:       python3-configobj
+Requires:       python3-jinja2
+Requires:       python3-jsonpatch
+Requires:       python3-oauthlib
+Requires:       python3-prettytable
+Requires:       python3-pyserial
+Requires:       python3-PyYAML
+Requires:       python3-requests
+Requires:       python3-six
 Requires:       shadow-utils
 Requires:       /usr/bin/run-parts
 Requires(post):   systemd-units
@@ -88,15 +105,15 @@ cp -p %{SOURCE2} README.fedora
 
 
 %build
-%{__python} setup.py build
+%{__python3} setup.py build
 
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT  --init-system=systemd
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT  --init-system=systemd
 
 # Don't ship the tests
-rm -r $RPM_BUILD_ROOT%{python_sitelib}/tests
+rm -r $RPM_BUILD_ROOT%{python3_sitelib}/tests
 
 mkdir -p $RPM_BUILD_ROOT/var/lib/cloud
 
@@ -115,7 +132,8 @@ cp -p tools/21-cloudinit.conf $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d/21-cloudi
 mkdir -p         $RPM_BUILD_ROOT/%{_unitdir}
 cp -p systemd/*  $RPM_BUILD_ROOT/%{_unitdir}
 
-
+%check
+nosetests-%{python3_version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -148,7 +166,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_unitdir}/cloud-init-local.service
 %{_unitdir}/cloud-init.service
 %{_tmpfilesdir}/%{name}.conf
-%{python_sitelib}/*
+%{python3_sitelib}/*
 %{_libexecdir}/%{name}
 %{_bindir}/cloud-init*
 %dir /run/cloud-init
@@ -161,6 +179,8 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Sat Feb 21 2015 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.6-4.20140218bzr1060
 - Updated to bzr snapshot 1060 for python 3 support
+- Switched to python 3 [RH:1024357]
+- Added %%check
 
 * Thu Feb 19 2015 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.6-3
 - Stopped depending on git to build
