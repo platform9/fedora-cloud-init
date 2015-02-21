@@ -101,6 +101,10 @@ ssh keys and to let the user run various scripts.
 %prep
 %autosetup -p1 -n %{name}-%{version}-bzr1060
 
+# Change shebangs
+sed -i -e 's|#!/usr/bin/env python|#!/usr/bin/env python3|' \
+       -e 's|#!/usr/bin/python|#!/usr/bin/python3|' tools/* cloudinit/ssh_util.py
+
 cp -p %{SOURCE2} README.fedora
 
 
