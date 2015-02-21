@@ -1,7 +1,7 @@
-Index: cloud-init-0.7.6/systemd/cloud-config.service
+Index: cloud-init-0.7.6-bzr1060/systemd/cloud-config.service
 ===================================================================
---- cloud-init-0.7.6.orig/systemd/cloud-config.service
-+++ cloud-init-0.7.6/systemd/cloud-config.service
+--- cloud-init-0.7.6-bzr1060.orig/systemd/cloud-config.service
++++ cloud-init-0.7.6-bzr1060/systemd/cloud-config.service
 @@ -1,8 +1,8 @@
  [Unit]
  Description=Apply the settings specified in cloud-config
@@ -13,25 +13,25 @@ Index: cloud-init-0.7.6/systemd/cloud-config.service
  
  [Service]
  Type=oneshot
-Index: cloud-init-0.7.6/systemd/cloud-init.service
+Index: cloud-init-0.7.6-bzr1060/systemd/cloud-init.service
 ===================================================================
---- cloud-init-0.7.6.orig/systemd/cloud-init.service
-+++ cloud-init-0.7.6/systemd/cloud-init.service
+--- cloud-init-0.7.6-bzr1060.orig/systemd/cloud-init.service
++++ cloud-init-0.7.6-bzr1060/systemd/cloud-init.service
 @@ -1,8 +1,8 @@
  [Unit]
  Description=Initial cloud-init job (metadata service crawler)
 -After=local-fs.target network.target cloud-init-local.service
 +After=local-fs.target network-online.target cloud-init-local.service
- Before=sshd.service sshd-keygen.service
+ Before=sshd.service sshd-keygen.service systemd-user-sessions.service
 -Requires=network.target
 +Requires=network-online.target
  Wants=local-fs.target cloud-init-local.service sshd.service sshd-keygen.service
  
  [Service]
-Index: cloud-init-0.7.6/systemd/cloud-final.service
+Index: cloud-init-0.7.6-bzr1060/systemd/cloud-final.service
 ===================================================================
---- cloud-init-0.7.6.orig/systemd/cloud-final.service
-+++ cloud-init-0.7.6/systemd/cloud-final.service
+--- cloud-init-0.7.6-bzr1060.orig/systemd/cloud-final.service
++++ cloud-init-0.7.6-bzr1060/systemd/cloud-final.service
 @@ -1,8 +1,8 @@
  [Unit]
  Description=Execute cloud user/final scripts

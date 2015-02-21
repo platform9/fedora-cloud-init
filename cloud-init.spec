@@ -7,19 +7,18 @@
 
 Name:           cloud-init
 Version:        0.7.6
-Release:        3%{?dist}
+Release:        4.20140218bzr1060%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
 License:        GPLv3
 URL:            http://launchpad.net/cloud-init
-Source0:        https://launchpad.net/cloud-init/trunk/%{version}/+download/%{name}-%{version}.tar.gz
+#Source0:        https://launchpad.net/cloud-init/trunk/%{version}/+download/%{name}-%{version}.tar.gz
+# bzr export -r 1060 cloud-init-0.7.6-bzr1060.tar.gz lp:cloud-init
+Source0:        cloud-init-0.7.6-bzr1060.tar.gz
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
 Source3:        cloud-init-tmpfiles.conf
-
-# Deal with Fedora/Ubuntu path differences
-Patch0:         cloud-init-0.7.6-path.patch
 
 # Fix rsyslog log filtering
 # https://code.launchpad.net/~gholms/cloud-init/rsyslog-programname/+merge/186906
@@ -35,17 +34,13 @@ Patch3:         cloud-init-0.7.6-ecdsa.patch
 # Handle whitespace in lists of groups to add new users to
 # https://bugs.launchpad.net/cloud-init/+bug/1354694
 # https://bugzilla.redhat.com/show_bug.cgi?id=1126365
-Patch4:         cloud-init-0.7.6-groupadd-list.patch
+Patch4:         cloud-init-0.7.6-bzr1060-groupadd-list.patch
 
 # Change network.target systemd deps to network-online.target
 # https://bugzilla.redhat.com/show_bug.cgi?id=1110731
 # https://bugzilla.redhat.com/show_bug.cgi?id=1112817
 # https://bugzilla.redhat.com/show_bug.cgi?id=1147613
-Patch5:         cloud-init-0.7.6-network-online.patch
-
-# Ensure cloud-init.service doesn't write all over the login prompt
-# http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/revision/1050
-Patch6:         cloud-init-0.7.6-user-session.patch
+Patch5:         cloud-init-0.7.6-bzr1060-network-online.patch
 
 # Use dnf instead of yum when available
 # https://bugzilla.redhat.com/show_bug.cgi?id=1194451
@@ -87,7 +82,7 @@ ssh keys and to let the user run various scripts.
 
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n %{name}-%{version}-bzr1060
 
 cp -p %{SOURCE2} README.fedora
 
@@ -164,6 +159,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Feb 21 2015 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.6-4.20140218bzr1060
+- Updated to bzr snapshot 1060 for python 3 support
+
 * Thu Feb 19 2015 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.6-3
 - Stopped depending on git to build
 - Stopped implicitly listing doc files twice

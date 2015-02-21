@@ -1,8 +1,8 @@
-Index: cloud-init-0.7.6/cloudinit/distros/__init__.py
+Index: cloud-init-0.7.6-bzr1060/cloudinit/distros/__init__.py
 ===================================================================
---- cloud-init-0.7.6.orig/cloudinit/distros/__init__.py
-+++ cloud-init-0.7.6/cloudinit/distros/__init__.py
-@@ -328,11 +328,16 @@ class Distro(object):
+--- cloud-init-0.7.6-bzr1060.orig/cloudinit/distros/__init__.py
++++ cloud-init-0.7.6-bzr1060/cloudinit/distros/__init__.py
+@@ -333,11 +333,16 @@ class Distro(object):
          }
  
          redact_opts = ['passwd']
@@ -10,7 +10,7 @@ Index: cloud-init-0.7.6/cloudinit/distros/__init__.py
 +        list_stripped_opts = ['groups']
  
          # Check the values and create the command
-         for key, val in kwargs.iteritems():
+         for key, val in kwargs.items():
  
              if key in adduser_opts and val and isinstance(val, str):
 +                if key in list_stripped_opts:
@@ -19,10 +19,10 @@ Index: cloud-init-0.7.6/cloudinit/distros/__init__.py
                  adduser_cmd.extend([adduser_opts[key], val])
  
                  # Redact certain fields from the logs
-@@ -612,6 +617,9 @@ def _normalize_groups(grp_cfg):
+@@ -629,6 +634,9 @@ def _normalize_groups(grp_cfg):
                              raise TypeError("Bad group member type %s" %
                                              type_utils.obj_name(v))
-             elif isinstance(i, (str, basestring)):
+             elif isinstance(i, six.string_types):
 +                # Common to have leading whitespace in string lists,
 +                # but not all useradd tools will support it.-
 +                i = i.strip()
