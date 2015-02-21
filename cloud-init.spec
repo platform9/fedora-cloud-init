@@ -56,6 +56,7 @@ BuildRequires:  python3-setuptools
 BuildRequires:  systemd-units
 
 # For tests
+BuildRequires:  iproute
 BuildRequires:  python3-configobj
 BuildRequires:  python3-httpretty
 BuildRequires:  python3-jinja2
