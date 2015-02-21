@@ -1,9 +1,5 @@
 %{!?license: %global license %%doc}
 
-# The only reason we are archful is because dmidecode is ExclusiveArch
-# https://bugzilla.redhat.com/show_bug.cgi?id=1067089
-%global debug_package %{nil}
-
 Name:           cloud-init
 Version:        0.7.6
 Release:        4.20140218bzr1060%{?dist}
@@ -47,9 +43,12 @@ Patch7:         cloud-init-0.7.6-dnf.patch
 
 # Deal with noarch -> arch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1067089
-Obsoletes:      cloud-init < 0.7.5-3
+#
+# In cloud-init-0.7.6-4 we switched back to noarch now that it uses
+# sysfs for DMI data on linux.
+Obsoletes:      cloud-init < 0.7.6-4
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch:      noarch
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
@@ -69,9 +68,6 @@ BuildRequires:  python3-PyYAML
 BuildRequires:  python3-requests
 BuildRequires:  python3-six
 
-%ifarch %{?ix86} x86_64 ia64
-Requires:       dmidecode
-%endif
 Requires:       e2fsprogs
 Requires:       iproute
 Requires:       libselinux-python3
@@ -186,6 +182,7 @@ rm -rf $RPM_BUILD_ROOT
 - Updated to bzr snapshot 1060 for python 3 support
 - Switched to python 3 [RH:1024357]
 - Added %%check
+- Dropped dmidecode dependency, switched back to noarch
 
 * Thu Feb 19 2015 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.6-3
 - Stopped depending on git to build
