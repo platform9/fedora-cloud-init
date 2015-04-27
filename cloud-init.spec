@@ -11,7 +11,7 @@ Summary:        Cloud instance init scripts
 Group:          System Environment/Base
 License:        GPLv3
 URL:            http://launchpad.net/cloud-init
-Source0:        https://launchpad.net/cloud-init/trunk/%{version}/+download/cloud-init-%{version}.tar.gz
+Source0:        https://github.com/platform9/cloud-init/releases/download/rel-pf9-0.7.4/pf9-cloud-init-0.7.4.tar.gz
 Source1:        cloud-init-rhel.cfg
 Source2:        cloud-init-README.fedora
 Patch0:         cloud-init-0.7.2-fedora.patch
